@@ -1,0 +1,1 @@
+import mymath as math

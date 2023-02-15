@@ -47,14 +47,22 @@ def p4(mu: int, N: int, l1: float, l2: float, g: float, flux: float) -> None:
     mu = mu * 4 * math.pi * 10**(-7)
     area = (1/100) * (1/100)
     Rc = 2 * (l1 + l2 - (1/100)) / (mu * area) / 10**6
-    print(str(Rc))
+    print("Relectance of iron core: " + str(Rc))
+    mu2 = 4 * math.pi * 10**-7
+    Ra = g / (mu2 * area) / 10**6
+    print("Relectance of air gap: " + str(Ra))
+    # flux = N * i / (2 * Req)        ->      i = flux * 2 * Req / N
+    i = (2 * Ra + Rc) * flux / N * 10**6
+    print("Current through iron core: " + str(i))
+
+def p5(area: float, g: float, N: int, B: float) -> None:
+    area /= (100*100); g /= 1000
     mu = 4 * math.pi * 10**-7
-    Ra = g / (mu * area) / 10**6
-    print(str(Ra))
-    i = Rc * flux / N * 10**6
-    print(str(i))
-    print(361.9301 / i)
-    print((l1 + l2) * N)
+    Ra = g/ (mu * area) / 10**6
+    print("Air gap reluctance: " + str(Ra))
+    i = B * area * 3 * Ra / N * 10**6
+    print("Current in the center leg: " + str(i))
+    lam = N * N * i / (3 * Ra) / 10**6
+    left_link = lam / 2
+    print("Flux linkage in the left hand coil: " + str(left_link))
 
-
-p4(2000, 108, 10, 5, 0.3, 0.0008)
