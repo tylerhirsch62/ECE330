@@ -32,7 +32,29 @@ def p3(i: float, N: int, d: float, g: float) -> None:
     d /= 100    # convert cm to m
     g /= 100    # convert cm to m
     L = 2/100; C = 4/100; R = 2/100
-    print(i*N/d/g/C)
-    print(N*L*d*g/i)
+    AL = L*d; AC = C*d; AR = R*d
+    mu = 4 * math.pi * 10**(-7)
+    RL = g/mu/AL; RC = g/mu/AC; RR = g/mu/AR
+    Req = (1 / ((1/RL) + (1/RR))) + RC
+    fC = N * i / Req
+    fL = fC / 2
+    print("Flux through center leg: " + str(fC))
+    print("Flux thorugh left leg: " + str(fL))
+    print("Flux thorugh right leg: " + str(fL))
 
-p3(3.5, 234, 2.1, 0.43)
+def p4(mu: int, N: int, l1: float, l2: float, g: float, flux: float) -> None:
+    g /= 100; l1 /= 100; l2 /= 100
+    mu = mu * 4 * math.pi * 10**(-7)
+    area = (1/100) * (1/100)
+    Rc = 2 * (l1 + l2 - (1/100)) / (mu * area) / 10**6
+    print(str(Rc))
+    mu = 4 * math.pi * 10**-7
+    Ra = g / (mu * area) / 10**6
+    print(str(Ra))
+    i = Rc * flux / N * 10**6
+    print(str(i))
+    print(361.9301 / i)
+    print((l1 + l2) * N)
+
+
+p4(2000, 108, 10, 5, 0.3, 0.0008)

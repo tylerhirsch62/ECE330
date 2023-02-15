@@ -20,3 +20,5 @@ def tan(angle):
 
 def atan(input):
     return math.degrees(math.atan(input))
+
+pi = math.pi
