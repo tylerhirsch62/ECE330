@@ -22,3 +22,4 @@ def atan(input):
     return math.degrees(math.atan(input))
 
 pi = math.pi
+mu = 4 * pi * 10**-7
