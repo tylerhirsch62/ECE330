@@ -1,4 +1,6 @@
 import mymath as math
+from math import sqrt
+from sympy import Eq, Symbol, solve
 
 def p1(N: int, g: float, d: float, length: float, mu: int, i: float) -> None:
     g /= 100; d /= 100; length /= 100; mu = math.mu * mu * 10**6
@@ -19,33 +21,54 @@ def p2(R1: float, R2: float, R3: float, N1: int, N2: int, i1: float, i2: float) 
     inductance2 = N2 * N2 / (R2 + (1/R3 + 1/R1)**-1) * 1000
     print("Inductance 1: " + str(inductance1))
     print("Inductance 2: " + str(inductance2))
-    fluxlinkage1 = inductance1 * i1 / 1000
+    Va = Symbol('Va')
+    eq = Eq((N1 * i1 - Va) / R1 + (N2 * i2 - Va) / R2 - Va / R3, 0)
+    Va = solve(eq)[0]
+    print(Va)
+    flux1 = (N1 * i1 - Va) / R1 + Va / R2 - (N2 * i2 - Va) / R2
+    fluxlinkage1 = N1 * flux1
     fluxlinkage2 = inductance2 * i2 / 1000
     print("Flux linkage 1: " + str(fluxlinkage1))
     print("Flux linkage 2: " + str(fluxlinkage2))
 
 def p3(W: float, D: float, N1: int, N2: int, g: float, i1: float, i2: float, x = float) -> None:
-    W /= 100; D /= 100; g /= 100
-    airarea1 = (g + D) * (g + W)
-    airarea2 = (x + D) * (x + W)
+    W /= 100; D /= 100; g /= 100; x/= 100
+    airarea1 = D * W
+    airarea2 = D * W
     airReluctance1 = g / (math.mu * airarea1) / 10**6
     airReluctance2 = x / (math.mu * airarea2) / 10**6
-    print("Reluctance of the air1: " + str(airReluctance1))
-    print("Reluctance of the air2: " + str(airReluctance2))
-    fluxlinkage1 = N1 * N1 * i1 / (airReluctance1 + 2 * airReluctance2) / 10**6
-    fluxlinkage2 = N2 * N2 * i2 / (1/airReluctance1 + 0.5/airReluctance2)**-1 / 10**6
+    flux1 = (N1 * i1 - N2 * i2) / airReluctance1 / 10**6
+    flux2 = N2 * i2 / (2 * airReluctance2) / 10**6 + (N2 * i2 - N1 * i1) / airReluctance1 / 10**6
+    fluxlinkage1 = flux1 * N1
+    fluxlinkage2 = flux2 * N2
     print("Flux linkage 1: " + str(fluxlinkage1))
     print("Flux linkage 2: " + str(fluxlinkage2))
 
 def p4(A: float, B: int, R1: int, R2: int, V: float) -> None:
-    print("Voltage across resistor 2: ")
-    print("Voltage angle across resister 2: ")
+    Res1 = math.vector(R1, 2* (B + A))
+    Res2 = math.vector(0, -2 * A)
+    Res3 = math.vector(R2, 2 * (B + A))
+    Vol = math.vector(V, 0)
+    Var1 = math.divideint(1, Res1)
+    Var2 = math.divideint(1, Res2)
+    Var3 = math.divideint(1, Res3)
+    Var4 = math.dividevec(Vol, Res1)
+    V = math.dividevec(Var4, math.addvec([Var1, Var2, Var3]))
+    V2 = math.divideint(4, math.vector(4, 2.54))
+    ans = math.multiplyvec(V, V2)
+    print("Voltage across resistor 2: " + str(ans.mag))
+    print("Voltage angle across resister 2: " + str(ans.angle))
 
 def p5(L1: float, L2: float) -> None:
-    print("Self inductance: ")
-    print("Mutual inductance: ")
-    print("Coupling coefficient: ")
+    selfinductance = (L1 + L2) / 4 * 1000
+    print("Self inductance: " + str(selfinductance))
+    mutualinductance = (L1 - (2 * selfinductance / 1000)) / 2 * 1000
+    print("Mutual inductance: " + str(mutualinductance))
+    couplingcoefficient = mutualinductance / selfinductance
+    print("Coupling coefficient: " + str(couplingcoefficient))
 
 
-# p2(1, 2.5, 2.7, 140, 130, 3.9, 3.7)
-p3(4.5, 1.6, 222, 186, 0.21, 6, 3, 0.12)
+# p2(2.3, 1.5, 1.8, 150, 146, 2.3, 2.7)
+# p3(3.1, 2.6, 115, 212, 0.41, 3, 7, 0.33)
+p4(0.1, 2, 1, 3, sqrt(2)*200)
+# p5(0.09, 0.049)
