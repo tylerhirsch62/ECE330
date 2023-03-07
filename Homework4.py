@@ -45,19 +45,30 @@ def p3(W: float, D: float, N1: int, N2: int, g: float, i1: float, i2: float, x =
     print("Flux linkage 2: " + str(fluxlinkage2))
 
 def p4(A: float, B: int, R1: int, R2: int, V: float) -> None:
-    Res1 = math.vector(R1, 2* (B + A))
+    Res1 = math.vector(R1, 2 * (B + A))
+    print("Res1: " + math.printvec(Res1))
     Res2 = math.vector(0, -2 * A)
+    print("Res2: " + math.printvec(Res2))
     Res3 = math.vector(R2, 2 * (B + A))
-    Vol = math.vector(V, 0)
+    print("Res3: " + math.printvec(Res3))
     Var1 = math.divideint(1, Res1)
+    print("Var1: " + math.printvec(Var1))
     Var2 = math.divideint(1, Res2)
+    print("Var2: " + math.printvec(Var2))
     Var3 = math.divideint(1, Res3)
+    print("Var3: " + math.printvec(Var3))
+    Vol = math.vector(V, 0)
+    print(" Vol: " + math.printvec(Vol))
     Var4 = math.dividevec(Vol, Res1)
+    print("Var4: " + math.printvec(Var4))
     V = math.dividevec(Var4, math.addvec([Var1, Var2, Var3]))
-    V2 = math.divideint(4, math.vector(4, 2.54))
-    ans = math.multiplyvec(V, V2)
+    print("   V: " + math.printvec(V))
+    V2 = math.dividevec(V, Res3)
+    print("  V2: " + math.printvec(V2))
+    ans = math.multiplyint(R2, V2)
+    print(" ans: " + math.printvec(ans))
     print("Voltage across resistor 2: " + str(ans.mag))
-    print("Voltage angle across resister 2: " + str(ans.angle))
+    print("Voltage angle across resister 2: " + str(360 - ans.angle))
 
 def p5(L1: float, L2: float) -> None:
     selfinductance = (L1 + L2) / 4 * 1000
@@ -70,5 +81,5 @@ def p5(L1: float, L2: float) -> None:
 
 # p2(2.3, 1.5, 1.8, 150, 146, 2.3, 2.7)
 # p3(3.1, 2.6, 115, 212, 0.41, 3, 7, 0.33)
-p4(0.1, 2, 1, 3, sqrt(2)*200)
+p4(0.55, 1.5, 1, 6, 160)
 # p5(0.09, 0.049)

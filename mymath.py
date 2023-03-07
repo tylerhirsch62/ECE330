@@ -36,6 +36,10 @@ class vector:
             self.angle = 90
         else:
             self.angle = -90
+        if self.x < 0 and self.y > 0:
+            self.angle = 180 - self.angle
+        if self.x < 0 and self.y < 0:
+            self.angle += 180
 
 def addvec(list: vector):
     x = 0
@@ -48,16 +52,33 @@ def addvec(list: vector):
 
 
 def divideint(x: float, vec: vector):
-    vec = vector(x/vec.mag * cos(vec.angle), x/vec.mag * sin(vec.angle))
-    return vec
+    veccy = vector(x/vec.mag * cos(-vec.angle), x/vec.mag * sin(-vec.angle))
+    return veccy
 
 def dividevec(vec1: vector, vec2: vector):
     vec = vector(vec1.mag/vec2.mag * cos(vec1.angle - vec2.angle), vec1.mag/vec2.mag * sin(vec1.angle - vec2.angle))
     return vec
 
 def multiplyvec(vec1: vector, vec2: vector):
-    vec = vector(vec1.mag * vec2.mag * cos(vec1.angle + vec2.angle), vec1.mag*vec2.mag * sin(vec1.angle + vec2.angle))
+    vec = vector(vec1.mag * vec2.mag * cos(vec1.angle + vec2.angle), vec1.mag * vec2.mag * sin(vec1.angle + vec2.angle))
     return vec
+
+def printvec(vec: vector):
+    return "Mag: " + out(vec.mag) + "Angle: " + out(vec.angle) + "x: " + out(vec.x) + "y: " + out(vec.y)
+
+def multiplyint(x: float, vec: vector):
+    veccy = vector(x * vec.mag * cos(vec.angle), x * vec.mag * sin(vec.angle))
+    return veccy
+
+def out(num):
+    outty = str(num)
+    output = ""
+    for i in range(0, 24):
+        if i < len(outty):
+            output = output + str(outty[i])
+        else:
+            output = output + " "
+    return output
 
 pi = math.pi
 mu = 4 * pi * 10**-7
